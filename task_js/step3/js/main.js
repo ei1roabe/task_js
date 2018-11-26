@@ -122,8 +122,7 @@ $('#btn-reset').on('click', function() {
 	result_txt.innerHTML = '-----'
 	myTotal = 0;
 	yourTotal = 0;
-	result_txt.classList.remove('win');
-	result_txt.classList.remove('lose');
+	result_txt.classList.remove('win', 'lose');
 	$('#my-table, #your-table').empty();
 	$('#btn-stand').addClass('disable');
 });
