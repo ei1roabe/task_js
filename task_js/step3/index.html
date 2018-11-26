@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Step3 ブラックジャック</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div id="container">
+		<div class="your-player table">
+			<p>ディーラー（合計：<span id="your_total"> - </span>）</p>
+			<table>
+				<tr id="your-table" class="table-inner"></tr>
+			</table>
+		</div>
+		<div class="result">Result : <span id="result-txt">-----</span></div>
+		<div class="my-player table">
+			<p>あなた（合計：<span id="my_total"> - </span>）</p>
+			<table>
+				<tr id="my-table" class="table-inner"></tr>
+			</table>
+		</div>
+		<div class="area-button">
+			<div class="inner-button">
+				<div id="btn-hit" class="btn">ヒット</div>
+				<div id="btn-stand" class="btn disable">スタンド</div>
+				<div id="btn-reset" class="btn">リセット</div>
+			</div>
+			<div class="inner-txt">
+				<p>1枚カードを引く</p>
+				<p>勝負する</p>
+				<p>やり直し</p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
