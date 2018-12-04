@@ -7,7 +7,7 @@ var yourTotal = 0; // 相手の手札の合計
 var result_txt = document.getElementById('result-txt'); // 結果を表示
 
 // ヒット
-$('#btn-hit').on('click', function() {
+$('.btn-hit').on('click', function() {
 	if (+myTotal >= 21) {
 		return;
 	}
@@ -51,12 +51,12 @@ $('#btn-hit').on('click', function() {
 	};
 
 	if (+myTotal !== 0) {
-		$('#btn-stand').removeClass('disable');
+		$('.btn-stand').removeClass('disable');
 	}
 }); 
 
 // スタンド
-$('#btn-stand').on('click', function() {
+$('.btn-stand').on('click', function() {
 	if (+myTotal === 0) {
 		return;
 	}
@@ -115,7 +115,7 @@ $('#btn-stand').on('click', function() {
 });
 
 // リセット
-$('#btn-reset').on('click', function() {
+$('.btn-reset').on('click', function() {
 	trumps = [];
 	my_total_txt.innerHTML = ' - ';
 	your_total_txt.innerHTML = ' - ';
@@ -124,5 +124,5 @@ $('#btn-reset').on('click', function() {
 	yourTotal = 0;
 	result_txt.classList.remove('win', 'lose');
 	$('#my-table, #your-table').empty();
-	$('#btn-stand').addClass('disable');
+	$('.btn-stand').addClass('disable');
 });
