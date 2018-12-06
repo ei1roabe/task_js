@@ -1,4 +1,5 @@
-class Judge {
+class Base {
+	// カードを引く
 	hit() {
 		if (+myTotal >= 21) {
 			return;
@@ -11,10 +12,10 @@ class Judge {
 		}
 
 		var num = trumps[Math.floor(Math.random() * trumps.length)];
-		var myTable = document.createElement('td');
-		var myHand = document.createTextNode(num);
-		myCard.appendChild(myTable);
-		myTable.appendChild(myHand);
+		var myTable = $('<td>');
+		var myHand = num;
+		myCard.append(myTable);
+		myTable.append(myHand);
 
 		switch(num) {
 			case 1:
@@ -23,19 +24,19 @@ class Judge {
 				} else {
 					myTotal += 1;
 				};
-				myTable.classList.add('ace');
+				myTable.addClass('ace');
 				break;
 			case 11:
 				myTotal += 10;
-				myTable.classList.add('jack');
+				myTable.addClass('jack');
 				break;
 			case 12:
 				myTotal += 10;
-				myTable.classList.add('queen');
+				myTable.addClass('queen');
 				break;
 			case 13:
 				myTotal += 10;
-				myTable.classList.add('king');
+				myTable.addClass('king');
 				break;
 			default:
 				myTotal += num;
@@ -46,6 +47,7 @@ class Judge {
 			$('.btn-stand').removeClass('disable');
 		}
 	}
+	// 勝負する
 	stand() {
 		if (+myTotal === 0) {
 			return;
@@ -61,8 +63,8 @@ class Judge {
 			var num = trumps[Math.floor(Math.random() * trumps.length)];
 			var yourTable = document.createElement('td'); 
 			var yourHand = document.createTextNode(num);
-			yourCard.appendChild(yourTable);
-			yourTable.appendChild(yourHand);
+			yourCard.append(yourTable);
+			yourTable.append(yourHand);
 
 			switch(num) {
 				case 1:
@@ -82,35 +84,36 @@ class Judge {
 					break;
 			};
 
-			my_total_txt.innerHTML = myTotal;
-			your_total_txt.innerHTML = yourTotal;
+			my_total_txt.html(myTotal);
+			your_total_txt.html(yourTotal);
 
 			if (myTotal <= 21 && myTotal > yourTotal) {
-				result_txt.innerHTML = 'あなたの勝ち';
-				result_txt.classList.add('win');
+				result_txt.html('あなたの勝ち');
+				result_txt.addClass('win');
 			} else if (myTotal <= 21 && yourTotal > 21) {
-				result_txt.innerHTML = 'あなたの勝ち';
-				result_txt.classList.add('win');
+				result_txt.html('あなたの勝ち');
+				result_txt.addClass('win');
 			} else if (myTotal <= 21 && myTotal === yourTotal) {
-				result_txt.innerHTML = '引き分け';
-				result_txt.classList.remove('win', 'lose');
+				result_txt.html('引き分け');
+				result_txt.removeClass('win lose');
 			} else if (myTotal > 21 && yourTotal > 21){
-				result_txt.innerHTML = '引き分け';
-				result_txt.classList.remove('win', 'lose');
+				result_txt.html('引き分け');
+				result_txt.removeClass('win lose');
 			} else {
-				result_txt.innerHTML = 'あなたの負け';
-				result_txt.classList.add('lose');
+				result_txt.html('あなたの負け');
+				result_txt.addClass('lose');
 			};
 		};
 	}
+	// リセット（初期化）
 	initialize() {
 		trumps = [];
-		my_total_txt.innerHTML = ' - ';
-		your_total_txt.innerHTML = ' - ';
-		result_txt.innerHTML = '-----'
+		my_total_txt.html(' - ');
+		your_total_txt.html(' - ');
+		result_txt.html('-----');
 		myTotal = 0;
 		yourTotal = 0;
-		result_txt.classList.remove('win', 'lose');
+		result_txt.removeClass('win lose');
 		$('#my-table, #your-table').empty();
 		$('.btn-stand').addClass('disable');
 	}
