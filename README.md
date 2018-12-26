@@ -1,7 +1,6 @@
 #JavaScript 課題
 
-#step2_1
-##javascriptのみで九九表を作成
-
-#step2_2
-##jQueryを併用して九九表を作成
+#step4_1
+##おみくじを作成
+###簡単なアニメーションをつける
+####実行方法　index.htmlをブラウザで開く
