@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>電卓</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="vendor/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<form name="calc">
+	<table border="2">
+		<tr>
+			<th colspan="3" align="right"><div id="output">0</div></th>
+			<th><input type="button" value="C" onClick="calc_clear('')"></th>
+		</tr>
+		<tr>
+			<td><input type="button" value="7" onClick="calc_num(7)"></td>
+			<td><input type="button" value="8" onClick="calc_num(8)"></td>
+			<td><input type="button" value="9" onClick="calc_num(9)"></td>
+			<td><input type="button" value="/" onClick="calc_num('/')"></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="4" onClick="calc_num(4)"></td>
+			<td><input type="button" value="5" onClick="calc_num(5)"></td>
+			<td><input type="button" value="6" onClick="calc_num(6)"></td>
+			<td><input type="button" value="×" onClick="calc_num('*')"></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="1" onClick="calc_num(1)"></td>
+			<td><input type="button" value="2" onClick="calc_num(2)"></td>
+			<td><input type="button" value="3" onClick="calc_num(3)"></td>
+			<td><input type="button" value="-" onClick="calc_num('-')"></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="0" onClick="calc_num(0)"></td>
+			<td><input type="button" value="." onClick="calc_period('.')"></td>
+			<td><input type="button" value="=" onClick="calc_equal('=')"></td>
+			<td><input type="button" value="+" onClick="calc_num('+')"></td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
