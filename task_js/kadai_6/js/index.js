@@ -57,8 +57,6 @@ function enemy() {
 		};
 		var rot = Math.random() * 360;
 		var angle = rot * Math.PI / 180;
-
-		//console.log(angle);
 	}
 
 	// 画面表示
@@ -69,7 +67,6 @@ function enemyChara() {
 	var charaShot = new Array(CHARA_SHOT_MAX_COUNT);
 	for (i =0; i < CHARA_SHOT_MAX_COUNT; i++) {
 		charaShot[i] = new CharacterShot();
-		//console.log(i);
 	}
 }
 
@@ -121,34 +118,34 @@ function shot() {
 
 // キー操作
 function keydownfunc (e) {
+	if (+e.keyCode === 32) {
+		vol3.play();
+	} else {
+		vol2.play();
+	}
 	switch (e.keyCode) {
 		case 37: // (「←」左)
 			if (+rocketPosX > 0) { // 左に動く
 				rocketPosX -= 10;
 			}
-			vol2.play();
 			break;
 		case 38: // (「↑」上)
 			if (+rocketPosY > 0) { // 上に動く
 				rocketPosY -= 10;
 			}
-			vol2.play();
 			break;
 		case 39: // (「→」右)
 			if (+rocketPosX < (moveField - rocketSize)) { // 右に動く
 				rocketPosX += 10;
 			}
-			vol2.play();
 			break;
 		case 40: // (「↓」下)
 			if (+rocketPosY < (moveField - rocketSize)) { // 下に動く
 				rocketPosY += 10;
 			}
-			vol2.play();
 			break;
 		case 32: // スペース
 			//shot();
-			vol3.play();
 			break;
 	}
 	draw();
