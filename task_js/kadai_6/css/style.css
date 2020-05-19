@@ -5,6 +5,12 @@ html, body {
   height: 640px;
 }
 
+#screen {
+  width: 640px;
+  height: 640px;
+  background: url("../image/bg_space.jpg");
+}
+
 #volume.on {
   background: url("../image/icon/v_on.png") no-repeat;
 }

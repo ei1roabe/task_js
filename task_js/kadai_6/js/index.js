@@ -1,81 +1,148 @@
+"use strict"
 var canvas = document.getElementById('screen');
-var ctx = canvas.getContext('2d'); // コンテキスト取得
-ctx.fillStyle = BG_COLOR;
+var ctx = canvas.getContext('2d');
 
+// FPS定義
+var FPS = 60;
+
+// キーの状態を定義
+var KEYS = new Array(256);
+// キーの初期値
+for (var k = 0; k < KEYS.length; k++) {
+	KEYS[k] = false;
+}
+
+// 開始フラグ
 var START_FLG = false;
-var CHARA_SHOT_MAX_COUNT = 10; // 弾の数
-var BG_COLOR = 'black'; // デフォルト
-var SHOT_COLOR = 'red'; // 弾の色
-var ENEMY1 = 10; // 敵の数
-var ENEMY1_SHOT_COLOR = 'blue'; // 敵の攻撃色
-var ENEMY2_SHOT_COLOR = 'yellow'; // 敵の攻撃色
-var ENEMY_BOSS_SHOT_COLOR = 'purple'; // BOSSの攻撃色
 
-// ロケットのオブジェクトを作成
-var rocket = new Object();
-rocket.img = new Image();
-rocket.img.src = 'image/rocket.png';
-rocketSize = 50;
-// ロケット初期位置
-rocketPosX = canvas.width / 2 - 25;
-rocketPosY = canvas.height - 50;
-// UFOのオブジェクトを作成
-var ufo = new Object();
-ufo.img = new Image();
-ufo.img.src = 'image/ufo.png';
-ufoSize = 80;
-
+// bgm, se
 var vol  = document.getElementById('audio');
 var vol2 = document.getElementById('move');
 var vol3 = document.getElementById('shot');
 
-// canvasのサイズ
-moveField = 640;
+// 自機のオブジェクトを作成
+var player = new Object();
+player.img = new Image();
+player.img.src = 'image/rocket.png';
+// 自機サイズ
+var playerSize = 50;
+// 自機初期位置
+var initPlayerPosX = (canvas.width / 2) - (playerSize / 2);
+var initPlayerPosY = canvas.height - playerSize;
+// 自機のHP
+var playerHp;
+
+// 敵機の数
+var ENEMIES = 5;
+// 敵機のオブジェクトを作成
+var enemy = new Object();
+enemy.img = new Image();
+enemy.img.src = 'image/ufo.png';
+// 敵機サイズ
+var enemySize = 30;
+// 敵機のHP
+var enemiesHpS = 10;  // 敵（小）
+var enemiesHpM = 50;  // 敵（中）
+var enemyBoss  = 500; // ボス
+
+var enemyPosX = new Array(ENEMIES);
+var enemyPosY = new Array(ENEMIES);
+
+// ループ処理
+function mainLoop() {
+	// 開始時間を保持
+	var startTime = new Date();
+
+	// 自機の移動処理
+	movePlayer();
+
+	// 開始までは停止
+	if (START_FLG) {
+		// 敵機の移動処理
+		moveEnemies();
+	}
+
+	// 描画
+	renderDraw();
+
+	// 経過時間と次のループまでの間隔
+	var progressTime = (new Date()) - startTime;
+	var interval = (1000 / FPS) - progressTime;
+	if (interval > 0) {
+		setTimeout(mainLoop, interval);
+	} else {
+		mainLoop();
+	}
+}
+
+// 自機の移動処理
+function movePlayer() {
+	// 左に動く
+	if(KEYS[37]) {
+		if (+initPlayerPosX > 0) {
+			initPlayerPosX -= 10;
+		}
+		vol2.play();
+	// 上に動く
+	} else if(KEYS[38]) {
+		if (+initPlayerPosY > 0) {
+			initPlayerPosY -= 10;
+		}
+		vol2.play();
+	// 右に動く
+	} else if (KEYS[39]) {
+		if (+initPlayerPosX < (canvas.width - playerSize)) {
+			initPlayerPosX += 10;
+		}
+		vol2.play();
+	// 下に動く
+	} else if (KEYS[40]) {
+		if (+initPlayerPosY < (canvas.width - playerSize)) {
+			initPlayerPosY += 10;
+		}
+		vol2.play();
+	} else if (KEYS[32]) {
+		vol3.play();
+	}
+}
+
+// 敵機の移動処理（上から下へランダム）
+function moveEnemies() {
+	for (var e = 0; e < ENEMIES; e++) {
+		enemyPosY[e] += 2;
+
+		// 敵機が画面の外に出たら上に戻す
+		if (enemyPosY[e] > canvas.height) {
+			enemyPosY[e] = -enemy.img.height;
+			// 位置をランダム
+			enemyPosX[e] = Math.random() * canvas.width;
+		}
+	}
+}
+
+// キー押下時
+window.onkeydown = function(e) {
+	KEYS[e.keyCode] = true;
+}
+
+// キーが離れた時
+window.onkeyup = function(e) {
+	KEYS[e.keyCode] = false;
+}
 
 window.onload = function() {
-	// 描画
-	draw();
-	renderStart();
-	enemy();
-	enemyChara();
-}
+	//ctx.fillRect(0, 0, 640, 640);
 
-function draw() {
-	// 塗りつぶし
-	ctx.fillRect(0, 0, 640, 640);
-	// 画面表示
-	ctx.drawImage(rocket.img, rocketPosX, rocketPosY, rocketSize, rocketSize);
-}
-
-function enemy() {
-	var Dot = function() {
-		this.size = Math.floor( Math.random() * 6 ) + ufoSize;
-		this.speed = this.size / ufoSize;
-		this.pos = {
-			x: Math.random() * canvas.width,
-			y: Math.random() * canvas.height
-		};
-		var rot = Math.random() * 360;
-		var angle = rot * Math.PI / 180;
+	// 自機の表示、位置、サイズ（img, x, y, 幅, 高さ）
+	ctx.drawImage(player.img, initPlayerPosX, initPlayerPosY, playerSize, playerSize);
+	// 敵機の表示、位置、サイズ（img, x, y, 幅, 高さ）
+	for (var i = 0; i < ENEMIES; i++) {
+		enemyPosX[i] = Math.random() * canvas.width;
+		enemyPosY[i] = Math.random() * canvas.height / 4; // 初期位置は1/4以内に設置
 	}
 
-	// 画面表示
-	ctx.drawImage(ufo.img, 0, 0, ufoSize, ufoSize);
-}
-
-function enemyChara() {
-	var charaShot = new Array(CHARA_SHOT_MAX_COUNT);
-	for (i =0; i < CHARA_SHOT_MAX_COUNT; i++) {
-		charaShot[i] = new CharacterShot();
-	}
-}
-
-// スタートするまで操作できない
-function renderStart() {
-	if (START_FLG) {
-		//キー操作イベントの設定
-		addEventListener('keydown', keydownfunc);
-	}
+	// 描画と再描画
+	mainLoop();
 }
 
 // 幕
@@ -85,8 +152,8 @@ curtain.onclick = function() {
 	this.classList.toggle('close');
 
 	START_FLG = true;
-	shot = true;
-	renderStart();
+	//shot = true;
+	renderDraw();
 }
 
 // 再生、一時停止
@@ -102,51 +169,14 @@ volume.onclick = function() {
 	}
 }
 
-function shot() {
-	if (shot) {
-		for (var i = 0; i < CHARA_SHOT_MAX_COUNT; i++) {
-			if (!charaShot[i].alive) {
-				charaShot[i].set(chara.position, 3, 5);
-
-				// ループを抜ける
-				break;
-			}
-		}
-		shot = false;
+// 描画・再描画
+function renderDraw() {
+	// キャンバスをクリアする
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	// 自機の新しい位置
+	ctx.drawImage(player.img, initPlayerPosX, initPlayerPosY, playerSize, playerSize);
+	// 敵機の位置
+	for (var i = 0; i < ENEMIES; i++) {
+		ctx.drawImage(enemy.img, enemyPosX[i], enemyPosY[i], enemySize, enemySize);
 	}
-}
-
-// キー操作
-function keydownfunc (e) {
-	if (+e.keyCode === 32) {
-		vol3.play();
-	} else {
-		vol2.play();
-	}
-	switch (e.keyCode) {
-		case 37: // (「←」左)
-			if (+rocketPosX > 0) { // 左に動く
-				rocketPosX -= 10;
-			}
-			break;
-		case 38: // (「↑」上)
-			if (+rocketPosY > 0) { // 上に動く
-				rocketPosY -= 10;
-			}
-			break;
-		case 39: // (「→」右)
-			if (+rocketPosX < (moveField - rocketSize)) { // 右に動く
-				rocketPosX += 10;
-			}
-			break;
-		case 40: // (「↓」下)
-			if (+rocketPosY < (moveField - rocketSize)) { // 下に動く
-				rocketPosY += 10;
-			}
-			break;
-		case 32: // スペース
-			//shot();
-			break;
-	}
-	draw();
 }
