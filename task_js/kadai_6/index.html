@@ -12,12 +12,16 @@
 	<canvas id="screen" width="640" height="640"></canvas>
 	<audio id="audio" src="bgm/carnival.mp3" loop></audio>
 	<audio id="move" src="bgm/cursor.mp3"></audio>
-	<audio id="shot" src="bgm/shot.mp3"></audio>
+	<audio id="shoot" src="bgm/shot.mp3"></audio>
 	<div id="curtain" class="open">
 		<p>START</p>
 	</div>
 	<div id="volume" class="off"></div>
-	<p class="score">スコア：</p>
+	<div class="img-area">
+		<img id="player" src="image/rocket.png" style="width: 50px;">
+		<img id="enemy" src="image/ufo.png" style="width: 30px;">
+		<img id="player_bullet" src="image/rocket.png" style="width: 15px;">
+	</div>
 
 	<script type="text/javascript" src="js/index.js"></script>
 </body>
