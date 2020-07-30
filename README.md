@@ -1,7 +1,2 @@
-#JavaScript 課題
-
-#step2_1
-##javascriptのみで九九表を作成
-
-#step2_2
-##jQueryを併用して九九表を作成
+#Vue.jsを使って何かする
+##step1 ライブラリを使ってリストをシャッフル
