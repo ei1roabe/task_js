@@ -55,6 +55,7 @@
 		}
 		.btn-addlist, .btn-itemlist {
 			width: 80%;
+			margin-bottom: 15px;
 			background-color: #eb6100;
 			border-bottom: 5px solid #b84c00;
 		}
@@ -63,23 +64,38 @@
 			background: #eb6100;
 			border-bottom: 2px solid #b84c00;
 		}
+		.listElement {
+			text-align: left;
+		}
+		.listElement .select {
+			padding: 10px 0 10px 20px;
+			background: #94cfec;
+		}
+		.list-item, item-element {
+			padding: 10px 0 10px 20px;
+		}
 	</style>
 </head>
 <body>
 	<div id="app">
 		<h1>ToDoアプリ</h1>
 		<div class="toolbar">
-			<button type="button" id="saveBtn" class="btn-save">保存</button>
+			<button v-on:click="save" type="button" id="saveBtn" class="btn-save">保存</button>
 		</div>
 		<div id="main" class="wrapper">
 			<div id="list-Panel" class="panel-l">
 				<button v-on:click="addList" type="button" id="addListBtn" class="btn-addlist">リストの追加</button>
-				<div v-on:click="selectedList(index)" v-for="(list, index) in lists">
-					{{ list.name }}
+				<div v-on:click="selectedList(index)" class="listElement" v-for="(list, index) in lists">
+					<div class="list-item" :class="[selectedListId === index ? 'select' : 'not-select']">
+						{{ list.name }}
+					</div>
 				</div>
 			</div>
 			<div id="todo-Panel" class="panel-r">
-				<button type="button" id="itemListBtn" class="btn-itemlist">アイテムの追加</button>
+				<button v-show="selectedListId !== null" v-on:click="addItem" type="button" id="itemListBtn" class="btn-itemlist">アイテムの追加</button>
+				<div class="itemElement" v-for="item in getCurrentItems()">
+					{{ item.name }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -113,8 +129,24 @@
 						items: []
 					});
 				},
+				addItem: function() {
+					let inputItemName = prompt('追加するアイテム名を入力してください');
+					if (inputItemName === null) {
+						return;
+					}
+					this.lists[this.selectedListId].items.push({
+						id: this.lists[this.selectedListId].items.length + 1,
+						name: inputItemName
+					});
+				},
 				selectedList: function(index) {
 					this.selectedListId = index;
+				},
+				getCurrentItems: function() {
+					if (this.selectedListId === null) {
+						return [];
+					}
+					return this.lists[this.selectedListId].items;
 				}
 			}
 		});
